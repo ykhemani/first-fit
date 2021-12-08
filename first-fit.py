@@ -2,6 +2,7 @@
 
 import argparse
 from EnvDefault import env_default
+import sys
 
 version = '0.0.1'
 
@@ -36,12 +37,24 @@ args = parser.parse_args()
 #segments = [5,12,8,15,15]
 rods = []
 
+error = False
 #rod_size  = input("Enter the rod size (e.g. 20): ")
-rod_size = int(args.rod_size)
+try:
+  rod_size = int(args.rod_size)
+except ValueError:
+  print("Error: Invalid rod size: '{}'.\n       Rod size must be specified as an integer.".format(args.rod_size))
+  error = True
 
 #segments_input = input("Enter the segment sizes separated by spaces: ")
 segment_split = args.segments.split()
-segments = list(map(int, segment_split))
+try:
+  segments = list(map(int, segment_split))
+except ValueError:
+  print("Error: Invalid segment specified: '{}'.\n       Segments must be specified as integers separated by spaces.".format(args.segments))
+  error = True
+
+if error:
+  sys.exit(1)
 
 segments.sort(reverse=True)
 print ()
