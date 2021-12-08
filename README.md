@@ -67,6 +67,20 @@ Rods:
 [5, 4]
 ```
 
+### Error handling.
+
+```
+$ ./first-fit.py --rod_size two --segments "5 12 15 15 4 8 3"
+Error: Invalid rod size: 'two'.
+       Rod size must be specified as an integer.
+```
+
+```
+$ ./first-fit.py --rod_size 20 --segments "5 12 15 15 4 8 3f"
+Error: Invalid segment specified: '5 12 15 15 4 8 3f'.
+       Segments must be specified as integers separated by spaces.
+```
+
 ## Running using the docker image:
 
 ```
