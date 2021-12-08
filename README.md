@@ -4,7 +4,7 @@ Given a maximum rod size and list of segments, [first-fit.py](first-fit.py) uses
 
 ## Requirements
 
-[first-fit.py](first-fit.py) requires [Python 3](https://www.python.org/download/releases/3.0/).
+[first-fit.py](first-fit.py) requires [Python 3](https://www.python.org/download/releases/3.0/). It can also be run in [Docker](https://docker.com).
 
 ## Usage
 
