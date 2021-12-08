@@ -3,6 +3,7 @@
 import argparse
 from EnvDefault import env_default
 import sys
+from fractions import Fraction
 
 version = '0.0.1'
 
@@ -15,6 +16,14 @@ parser.add_argument(
   action=env_default('RODSIZE'),
   help='Rod size - e.g.: 20',
   required=True
+)
+
+parser.add_argument(
+  '--kerf',
+  action=env_default('KERF'),
+  help='Kerf - e.g.: 1/8 or 0.125',
+  required=False,
+  default=0.125
 )
 
 parser.add_argument(
@@ -40,15 +49,21 @@ rods = []
 error = False
 #rod_size  = input("Enter the rod size (e.g. 20): ")
 try:
-  rod_size = int(args.rod_size)
+  rod_size = float(args.rod_size)
 except ValueError:
-  print("Error: Invalid rod size: '{}'.\n       Rod size must be specified as an integer.".format(args.rod_size))
+  print("Error: Invalid rod size: '{}'.\n       Rod size must be specified as a number.".format(args.rod_size))
+  error = True
+
+try:
+  kerf = float(Fraction(args.kerf))
+except ValueError:
+  print("Error: Invalid kerf: '{}'.\n       Rod size must be specified as a number.".format(args.kerf))
   error = True
 
 #segments_input = input("Enter the segment sizes separated by spaces: ")
 segment_split = args.segments.split()
 try:
-  segments = list(map(int, segment_split))
+  segments = list(map(float, segment_split))
 except ValueError:
   print("Error: Invalid segment specified: '{}'.\n       Segments must be specified as integers separated by spaces.".format(args.segments))
   error = True
@@ -60,6 +75,8 @@ segments.sort(reverse=True)
 print ()
 print ("Segments: {}".format(segments))
 print ("Rod size: {}".format(rod_size))
+if kerf > 0:
+  print ("Kerf: {}".format(kerf))
 print ()
 
 for segment in segments:
@@ -70,8 +87,11 @@ for segment in segments:
 
   found_a_rod = False
   for rod in rods:
-    rod_sum = sum(rod)
-
+    #rod_sum = sum(rod)
+    rod_sum = 0
+    for rod_segment in rod:
+      rod_sum += rod_segment + kerf
+    
     if (rod_sum + segment) <= rod_size:
       rod.append(segment)
       #print("{} - found a rod".format(segment))
@@ -85,5 +105,11 @@ for segment in segments:
   #print("{} - created new rod".format(segment))
 
 print ("Rods:")
+
 for rod in rods:
-  print(rod)
+  waste = 0
+  total_kerf = 0
+  for segment in rod:
+    total_kerf += kerf
+  waste = rod_size - sum(rod) - total_kerf
+  print("{}\n  waste: {}\n  loss for kerf: {}".format(rod, waste, total_kerf))
