@@ -84,7 +84,7 @@ Error: Invalid segment specified: '5 12 15 15 4 8 3f'.
 ## Running using the docker image:
 
 ```
-$ docker run -e RODSIZE=20 -e SEGMENTS="1 15 12 9 3" ykhemani/first-fit:0.0.1
+$ docker run -e RODSIZE=20 -e SEGMENTS="1 15 12 9 3" ykhemani/first-fit:0.0.2
 
 Segments: [15, 12, 9, 3, 1]
 Rod size: 20
